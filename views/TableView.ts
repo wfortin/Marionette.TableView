@@ -1,4 +1,4 @@
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 
 module Coveo {
     export var TableViewEvents = {
@@ -6,14 +6,14 @@ module Coveo {
         Remove: 'table-view:remove'
     }
 
-    interface TableViewCollection<TModel extends TableRowModel> extends Backbone.Collection<TModel> {
+    interface TableViewCollection<TModel extends Backbone.Model> extends Backbone.Collection<TModel> {
         filterable?: FilterableCollection<TModel>;
         pageable?: PageableCollection<TModel>;
         sortable?: SortableCollection<TModel>;
     }
 
     export class TableView extends Marionette.CompositeView<Backbone.Model, any> {
-        collection: TableViewCollection<TableRowModel>;
+        collection: TableViewCollection<Backbone.Model>;
 
         private currentRenderingIndex: number;
         private minIndex: number;
@@ -63,7 +63,7 @@ module Coveo {
             }
         }
 
-        onFilter() {
+        protected onFilter() {
             var val = this.ui.inputFilter.val();
             if (this.collection.filterable && val != this.collection.filterable.getFilter()) {
                 this.collection.filterable.applyFilter({
@@ -74,7 +74,7 @@ module Coveo {
             }
         }
 
-        filter(child: TableRowModel, index: number, collection: TableCollection) {
+        protected filter(child: FilterableModel, index: number, collection: TableCollection) {
             if (this.collection.filterable) {
                 if (child.matchesFilter === true) {
                     if (this.collection.pageable) {
@@ -92,7 +92,7 @@ module Coveo {
             }
         }
 
-        onSort(e: JQueryEventObject) {
+        protected onSort(e: JQueryEventObject) {
             this.currentRenderingIndex = 0;
             if (this.collection.sortable) {
                 this.collection.sortable.ascending = !!$(e.currentTarget).hasClass('asc');
@@ -101,14 +101,14 @@ module Coveo {
             }
         }
 
-        viewComparator(a, b) {
+        protected viewComparator(a, b) {
             if (this.collection.sortable) {
                 return this.collection.sortable.compare(a, b);
             }
             return 0;
         }
 
-        onNextPage() {
+        protected onNextPage() {
             if (this.collection.pageable) {
                 this.collection.pageable.nextPage();
                 this.currentRenderingIndex = this.collection.pageable.minIndex;
@@ -116,7 +116,7 @@ module Coveo {
             }
         }
 
-        onPreviousPage() {
+        protected onPreviousPage() {
             if (this.collection.pageable) {
                 this.collection.pageable.previousPage();
                 this.currentRenderingIndex = this.collection.pageable.minIndex;
@@ -124,7 +124,7 @@ module Coveo {
             }
         }
 
-        renderChildren() {
+        public renderChildren() {
             this._renderChildren();
         }
     }

@@ -1,4 +1,4 @@
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 
 module Coveo {
     export class SortableCollection<TModel extends Backbone.Model> {
@@ -13,7 +13,7 @@ module Coveo {
             this.ascending = true;
         }
 
-        compare(a: TableRowModel, b: TableRowModel) {
+        compare(a: TModel, b: TModel) {
             if (this.ascending) {
                 if (a.get(this.comparatorValue) < b.get(this.comparatorValue)) {
                     return -1;

@@ -1,4 +1,4 @@
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 
 module Coveo {
     export class TableCollectionBuilder {
@@ -19,7 +19,7 @@ module Coveo {
         }
     }
 
-    export interface FilterablePageableSelectableSortable<TModel extends PickySelectable> extends PickyMultiSelect<TModel> {
+    export interface FilterablePageableSortable<TModel extends Backbone.Model> extends Backbone.Collection<TModel> {
         filterable?: FilterableCollection<TModel>;
         pageable?: PageableCollection<TModel>;
     }

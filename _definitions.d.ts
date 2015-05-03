@@ -5,13 +5,10 @@
 /// <reference path="definitions/underscore.d.ts" />
 /// <reference path="definitions/underscore.string.d.ts" />
 
-/// <reference path="PickyModels.ts" />
-/// <reference path="RowView.ts" />
-/// <reference path="TableView.ts" />
+/// <reference path="views/RowView.ts" />
+/// <reference path="views/TableView.ts" />
 
-/// <reference path="FilterableCollection.ts" />
-/// <reference path="PageableCollection.ts" />
-/// <reference path="SortableCollection.ts" />
-/// <reference path="TableCollectionBuilder.ts" />
-
-/// <reference path="TableCollection.ts" />
+/// <reference path="collections/FilterableCollection.ts" />
+/// <reference path="collections/PageableCollection.ts" />
+/// <reference path="collections/SortableCollection.ts" />
+/// <reference path="collections/TableCollectionBuilder.ts" />

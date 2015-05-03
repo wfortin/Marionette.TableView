@@ -59,7 +59,7 @@ var Coveo;
     })(Backbone.Collection);
     Coveo.PickyMultiSelect = PickyMultiSelect;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     var RowView = (function (_super) {
@@ -70,14 +70,11 @@ var Coveo;
                 tagName: "tr"
             }, options));
         }
-        RowView.prototype.onRender = function () {
-            console.log('Rendered');
-        };
         return RowView;
     })(Marionette.ItemView);
     Coveo.RowView = RowView;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     Coveo.TableViewEvents = {
@@ -187,7 +184,7 @@ var Coveo;
     })(Marionette.CompositeView);
     Coveo.TableView = TableView;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     Coveo.MATCHES_FILTER = 'matchesFilter';
@@ -328,7 +325,7 @@ var Coveo;
     })();
     Coveo.Strings = Strings;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     Coveo.PageableCollectionOptionsDefault = {
@@ -429,7 +426,7 @@ var Coveo;
     })();
     Coveo.PageableCollection = PageableCollection;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     var SortableCollection = (function () {
@@ -464,7 +461,7 @@ var Coveo;
     })();
     Coveo.SortableCollection = SortableCollection;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     var TableCollectionBuilder = (function () {
@@ -486,22 +483,14 @@ var Coveo;
     })();
     Coveo.TableCollectionBuilder = TableCollectionBuilder;
 })(Coveo || (Coveo = {}));
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
-    var TableRowModel = (function (_super) {
-        __extends(TableRowModel, _super);
-        function TableRowModel() {
-            _super.apply(this, arguments);
-        }
-        return TableRowModel;
-    })(Backbone.Model);
-    Coveo.TableRowModel = TableRowModel;
     var TableCollection = (function (_super) {
         __extends(TableCollection, _super);
         function TableCollection(models, options) {
             _super.call(this, models, _.extend({
-                model: TableRowModel
+                model: Backbone.Model
             }, options));
             Coveo.TableCollectionBuilder.withFilters(this).withSort(this).withPagination(this, {
                 modelsPerPage: 3,
@@ -512,7 +501,6 @@ var Coveo;
     })(Backbone.Collection);
     Coveo.TableCollection = TableCollection;
 })(Coveo || (Coveo = {}));
-/// <reference path="../_definitions.d.ts" />
 var users = new Coveo.TableCollection([
     {
         "firstName": "Sonya",

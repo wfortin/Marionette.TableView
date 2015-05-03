@@ -1,4 +1,4 @@
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 
 module Coveo {
 	export class RowView extends Marionette.ItemView<Backbone.Model> {
@@ -7,10 +7,6 @@ module Coveo {
 				template: "#row",
 				tagName: "tr"
 			}, options))
-		}
-		
-		onRender() {
-			console.log('Rendered');
 		}
 	}
 }

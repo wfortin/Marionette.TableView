@@ -1,4 +1,4 @@
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 
 module Coveo {
     export interface PageableCollectionOptions {
