@@ -5,7 +5,7 @@
   "main": " ",
   "scripts": {
     "compile": "node ./node_modules/typescript/bin/tsc --out demo/demo.js demo/demo.ts -t ES5",
-    "tests:compile": "node ./node_modules/typescript/bin/tsc --out tests/tests.js tests/tests.ts -t ES5",
+    "test:compile": "node ./node_modules/typescript/bin/tsc --out tests/tests.js tests/tests.ts -t ES5",
     "test:run": "node ./node_modules/karma/bin/karma start tests/karma.conf.js",
     "test": "npm run test:compile && npm run test:run"
   },
