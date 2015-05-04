@@ -74,7 +74,7 @@ module Coveo {
             }
         }
 
-        protected filter(child: FilterableModel, index: number, collection: TableCollection) {
+        protected filter(child: FilterableModel, index: number, collection: TableViewCollection<Backbone.Model>) {
             if (this.collection.filterable) {
                 if (child.matchesFilter === true) {
                     if (this.collection.pageable) {

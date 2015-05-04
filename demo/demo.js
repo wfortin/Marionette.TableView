@@ -1,65 +1,10 @@
-/// <reference path="_definitions.d.ts" />
+/// <reference path="../_definitions.d.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var Coveo;
-(function (Coveo) {
-    Coveo.PickySelectableEvents = {
-        Selected: 'selected',
-        Deselected: 'deselected'
-    };
-    Coveo.SingleSelectEvents = {
-        SelectOne: 'select:one',
-        DeselectOne: 'deselect:one'
-    };
-    Coveo.MultiSelectEvents = {
-        SelectAll: 'select:all',
-        SelectNone: 'select:none',
-        SelectSome: 'select:some'
-    };
-    var PickySelectable = (function (_super) {
-        __extends(PickySelectable, _super);
-        function PickySelectable(attributes, options) {
-            _super.call(this, attributes, options);
-            var selectable = new Backbone.Picky.Selectable(this);
-            $.extend(this, selectable);
-        }
-        return PickySelectable;
-    })(Backbone.Model);
-    Coveo.PickySelectable = PickySelectable;
-    var PickySingleSelect = (function (_super) {
-        __extends(PickySingleSelect, _super);
-        function PickySingleSelect(models, options) {
-            _super.call(this, models, options);
-            var singleSelect = new Backbone.Picky.SingleSelect(this);
-            // The 'select' method already exists on a Backbone Collection. We're moving Picky's 'select' to 'pickySelect'.
-            var pickySelect = singleSelect.select;
-            delete singleSelect.select;
-            singleSelect.pickySelect = pickySelect;
-            $.extend(this, singleSelect);
-        }
-        return PickySingleSelect;
-    })(Backbone.Collection);
-    Coveo.PickySingleSelect = PickySingleSelect;
-    var PickyMultiSelect = (function (_super) {
-        __extends(PickyMultiSelect, _super);
-        function PickyMultiSelect(models, options) {
-            _super.call(this, models, options);
-            var multiSelect = new Backbone.Picky.MultiSelect(this);
-            // The 'select' method already exists on a Backbone Collection. We're moving Picky's 'select' to 'pickySelect'.
-            var pickySelect = multiSelect.select;
-            delete multiSelect.select;
-            multiSelect.pickySelect = pickySelect;
-            $.extend(this, multiSelect);
-        }
-        return PickyMultiSelect;
-    })(Backbone.Collection);
-    Coveo.PickyMultiSelect = PickyMultiSelect;
-})(Coveo || (Coveo = {}));
-/// <reference path="../_definitions.d.ts" />
 var Coveo;
 (function (Coveo) {
     var RowView = (function (_super) {
