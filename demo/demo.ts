@@ -1,6 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
-module Coveo {
+module Marionette {
   export class TableCollection extends Backbone.Collection<Backbone.Model> {
     filterable: FilterableCollection<Backbone.Model>;
     sortable: SortableCollection<Backbone.Model>;
@@ -18,7 +18,7 @@ module Coveo {
   }
 }
 
-var users = new Coveo.TableCollection(
+var users = new Marionette.TableCollection(
   [
     {
       "firstName": "Sonya",
@@ -98,7 +98,7 @@ var users = new Coveo.TableCollection(
   ]);
 
 $(document).ready(() => {
-  var table = new Coveo.TableView({
+  var table = new Marionette.TableView({
     collection: users
   });
   table.render();

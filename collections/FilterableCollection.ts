@@ -1,6 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
-module Coveo {
+module Marionette {
     export interface FilterEventArguments extends Backbone.Silenceable {
         filter: string;
         dateFormat?: string;

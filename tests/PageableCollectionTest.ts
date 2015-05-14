@@ -1,6 +1,6 @@
 /// <reference path="tests.ts" />
 
-module Coveo.Pageable.Test {
+module Marionette.Pageable.Test {
 
     var pageableCollectionOptions: PageableCollectionOptions = {
         modelsPerPage: 4,

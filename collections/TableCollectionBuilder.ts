@@ -1,6 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
-module Coveo {
+module Marionette {
     export class TableCollectionBuilder {
 
         static withFilters(collection: Filterable<Backbone.Model>) {

@@ -1,6 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
-module Coveo {
+module Marionette {
     export interface PageableCollectionOptions {
         modelsPerPage?: number;
         showXPages?: number;

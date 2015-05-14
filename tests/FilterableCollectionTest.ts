@@ -1,6 +1,6 @@
 /// <reference path="tests.ts" />
 
-module Coveo.Filterable.Test {
+module Marionette.Filterable.Test {
 
   class TableCollection extends Backbone.Collection<Backbone.Model> {
     filterable: FilterableCollection<Backbone.Model>;

@@ -5,8 +5,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-var Coveo;
-(function (Coveo) {
+var Marionette;
+(function (Marionette) {
     var RowView = (function (_super) {
         __extends(RowView, _super);
         function RowView(options) {
@@ -17,12 +17,12 @@ var Coveo;
         }
         return RowView;
     })(Marionette.ItemView);
-    Coveo.RowView = RowView;
-})(Coveo || (Coveo = {}));
+    Marionette.RowView = RowView;
+})(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
-var Coveo;
-(function (Coveo) {
-    Coveo.TableViewEvents = {
+var Marionette;
+(function (Marionette) {
+    Marionette.TableViewEvents = {
         Add: 'table-view:add',
         Remove: 'table-view:remove'
     };
@@ -39,7 +39,7 @@ var Coveo;
                 }
             }, options));
             this.template = '#table';
-            this.childView = Coveo.RowView;
+            this.childView = Marionette.RowView;
             this.childViewContainer = 'tbody';
             this.reorderOnSort = true;
             this.ui = _.extend({
@@ -62,8 +62,8 @@ var Coveo;
         }
         TableView.prototype.triggers = function () {
             return {
-                'click button#add.enabled': Coveo.TableViewEvents.Add,
-                'click button#delete.enabled': Coveo.TableViewEvents.Remove
+                'click button#add.enabled': Marionette.TableViewEvents.Add,
+                'click button#delete.enabled': Marionette.TableViewEvents.Remove
             };
         };
         TableView.prototype.onFilter = function () {
@@ -127,14 +127,14 @@ var Coveo;
         };
         return TableView;
     })(Marionette.CompositeView);
-    Coveo.TableView = TableView;
-})(Coveo || (Coveo = {}));
+    Marionette.TableView = TableView;
+})(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
-var Coveo;
-(function (Coveo) {
-    Coveo.MATCHES_FILTER = 'matchesFilter';
-    Coveo.MATCHES_PREDICATE = 'matchesPredicate';
-    Coveo.FilterEvents = {
+var Marionette;
+(function (Marionette) {
+    Marionette.MATCHES_FILTER = 'matchesFilter';
+    Marionette.MATCHES_PREDICATE = 'matchesPredicate';
+    Marionette.FilterEvents = {
         Filter: 'collection:filtered'
     };
     var FilterableCollection = (function () {
@@ -163,26 +163,26 @@ var Coveo;
             this.currentPredicate = args;
             if (args.predicateProperties || args.predicateFunction) {
                 this.collection.each(function (model) {
-                    model[Coveo.MATCHES_PREDICATE] = false;
+                    model[Marionette.MATCHES_PREDICATE] = false;
                 });
                 if (args.predicateProperties) {
                     _.each(this.collection.where(args.predicateProperties), function (model) {
-                        model[Coveo.MATCHES_PREDICATE] = true;
+                        model[Marionette.MATCHES_PREDICATE] = true;
                     });
                 }
                 else if (args.predicateFunction) {
                     _.each(this.collection.filter(args.predicateFunction), function (model) {
-                        model[Coveo.MATCHES_PREDICATE] = true;
+                        model[Marionette.MATCHES_PREDICATE] = true;
                     });
                 }
             }
             else {
                 this.collection.each(function (model) {
-                    model[Coveo.MATCHES_PREDICATE] = true;
+                    model[Marionette.MATCHES_PREDICATE] = true;
                 });
             }
             if (!args.silent) {
-                this.collection.trigger(Coveo.FilterEvents.Filter);
+                this.collection.trigger(Marionette.FilterEvents.Filter);
             }
         };
         FilterableCollection.prototype.getPredicateFilter = function () {
@@ -198,8 +198,8 @@ var Coveo;
             return 0;
         };
         FilterableCollection.prototype.getVisibleCount = function () {
-            var f = Coveo.MATCHES_FILTER;
-            var p = Coveo.MATCHES_PREDICATE;
+            var f = Marionette.MATCHES_FILTER;
+            var p = Marionette.MATCHES_PREDICATE;
             return this.collection.filter(function (model) {
                 return model[f] != false && model[p] != false;
             }).length;
@@ -208,7 +208,7 @@ var Coveo;
             var _this = this;
             this.currentFilter = args;
             this.collection.each(function (model) {
-                model[Coveo.MATCHES_FILTER] = true;
+                model[Marionette.MATCHES_FILTER] = true;
             });
             if (!_.isEmpty(args.filter)) {
                 this.collection.each(function (model) {
@@ -222,11 +222,11 @@ var Coveo;
                             break;
                         }
                     }
-                    model[Coveo.MATCHES_FILTER] = match;
+                    model[Marionette.MATCHES_FILTER] = match;
                 });
             }
             if (!args.silent) {
-                this.collection.trigger(Coveo.FilterEvents.Filter);
+                this.collection.trigger(Marionette.FilterEvents.Filter);
             }
         };
         FilterableCollection.prototype.clearFilter = function () {
@@ -251,7 +251,7 @@ var Coveo;
         };
         return FilterableCollection;
     })();
-    Coveo.FilterableCollection = FilterableCollection;
+    Marionette.FilterableCollection = FilterableCollection;
     var Strings = (function () {
         function Strings() {
         }
@@ -268,16 +268,16 @@ var Coveo;
         };
         return Strings;
     })();
-    Coveo.Strings = Strings;
-})(Coveo || (Coveo = {}));
+    Marionette.Strings = Strings;
+})(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
-var Coveo;
-(function (Coveo) {
-    Coveo.PageableCollectionOptionsDefault = {
+var Marionette;
+(function (Marionette) {
+    Marionette.PageableCollectionOptionsDefault = {
         modelsPerPage: 10,
         showXPages: 6
     };
-    Coveo.PageEvents = {
+    Marionette.PageEvents = {
         PageChanged: 'changePage'
     };
     var PageableCollection = (function () {
@@ -286,7 +286,7 @@ var Coveo;
             this.collection = collection;
             this.currentPage = 0;
             this.offset = 0;
-            this.options = _.defaults(options, Coveo.PageableCollectionOptionsDefault);
+            this.options = _.defaults(options, Marionette.PageableCollectionOptionsDefault);
         }
         Object.defineProperty(PageableCollection.prototype, "modelsPerPage", {
             get: function () {
@@ -325,7 +325,7 @@ var Coveo;
             this.currentPage = Math.max(Math.min(p, this.lastPage), 0);
             this.offset = offset;
             if (!silent) {
-                this.collection.trigger(Coveo.PageEvents.PageChanged);
+                this.collection.trigger(Marionette.PageEvents.PageChanged);
             }
         };
         Object.defineProperty(PageableCollection.prototype, "pagesInfo", {
@@ -354,26 +354,64 @@ var Coveo;
             if (silent === void 0) { silent = false; }
             this.currentPage = Math.max(Math.min(this.currentPage + 1, this.lastPage), 0);
             if (!silent) {
-                this.collection.trigger(Coveo.PageEvents.PageChanged);
+                this.collection.trigger(Marionette.PageEvents.PageChanged);
             }
         };
         PageableCollection.prototype.previousPage = function (silent) {
             if (silent === void 0) { silent = false; }
             this.currentPage = Math.max(Math.min(this.currentPage - 1, this.lastPage), 0);
             if (!silent) {
-                this.collection.trigger(Coveo.PageEvents.PageChanged);
+                this.collection.trigger(Marionette.PageEvents.PageChanged);
             }
         };
         PageableCollection.prototype.shouldRender = function (index) {
             return index >= this.minIndex && index <= this.maxIndex;
         };
+        PageableCollection.prototype.getPagesRange = function (showPrevNext, showFirstLast, lastPage) {
+            if (showPrevNext === void 0) { showPrevNext = true; }
+            if (showFirstLast === void 0) { showFirstLast = false; }
+            if (lastPage === void 0) { lastPage = 0; }
+            var pages = [];
+            lastPage = Math.max(this.lastPage, lastPage);
+            var start;
+            var end;
+            var offsetedPage = this.currentPage + this.offset;
+            if (offsetedPage + (this.options.showXPages / 2) > lastPage) {
+                end = lastPage;
+                start = Math.max(lastPage - this.options.showXPages, 0);
+            }
+            else {
+                start = Math.max(Math.floor((this.currentPage + this.offset) - (this.options.showXPages / 2)), 0);
+                end = Math.min(start + this.options.showXPages, lastPage);
+            }
+            _.each(_.range(start, end + 1), function (i) {
+                pages.push({ label: (i + 1).toString(), page: i });
+            });
+            if (showPrevNext) {
+                pages.unshift({
+                    label: 'previous',
+                    page: Math.max(this.currentPage - 1 + this.offset, 0),
+                    icon: 'coveo-sprites-tables-previous'
+                });
+                pages.push({
+                    label: 'next',
+                    page: Math.min(this.currentPage + 1 + this.offset, lastPage),
+                    icon: 'coveo-sprites-tables-next'
+                });
+            }
+            if (showFirstLast) {
+                pages.unshift({ label: 'first', page: 0, icon: 'coveo-sprites-tables-first' });
+                pages.push({ label: 'last', page: lastPage, icon: 'coveo-sprites-tables-last' });
+            }
+            return pages;
+        };
         return PageableCollection;
     })();
-    Coveo.PageableCollection = PageableCollection;
-})(Coveo || (Coveo = {}));
+    Marionette.PageableCollection = PageableCollection;
+})(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
-var Coveo;
-(function (Coveo) {
+var Marionette;
+(function (Marionette) {
     var SortableCollection = (function () {
         function SortableCollection(collection) {
             this.ascending = false;
@@ -404,49 +442,49 @@ var Coveo;
         };
         return SortableCollection;
     })();
-    Coveo.SortableCollection = SortableCollection;
-})(Coveo || (Coveo = {}));
+    Marionette.SortableCollection = SortableCollection;
+})(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
-var Coveo;
-(function (Coveo) {
+var Marionette;
+(function (Marionette) {
     var TableCollectionBuilder = (function () {
         function TableCollectionBuilder() {
         }
         TableCollectionBuilder.withFilters = function (collection) {
-            collection.filterable = new Coveo.FilterableCollection(collection);
+            collection.filterable = new Marionette.FilterableCollection(collection);
             return this;
         };
         TableCollectionBuilder.withPagination = function (collection, options) {
-            collection.pageable = new Coveo.PageableCollection(collection, options);
+            collection.pageable = new Marionette.PageableCollection(collection, options);
             return this;
         };
         TableCollectionBuilder.withSort = function (collection) {
-            collection.sortable = new Coveo.SortableCollection(collection);
+            collection.sortable = new Marionette.SortableCollection(collection);
             return this;
         };
         return TableCollectionBuilder;
     })();
-    Coveo.TableCollectionBuilder = TableCollectionBuilder;
-})(Coveo || (Coveo = {}));
+    Marionette.TableCollectionBuilder = TableCollectionBuilder;
+})(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
-var Coveo;
-(function (Coveo) {
+var Marionette;
+(function (Marionette) {
     var TableCollection = (function (_super) {
         __extends(TableCollection, _super);
         function TableCollection(models, options) {
             _super.call(this, models, _.extend({
                 model: Backbone.Model
             }, options));
-            Coveo.TableCollectionBuilder.withFilters(this).withSort(this).withPagination(this, {
+            Marionette.TableCollectionBuilder.withFilters(this).withSort(this).withPagination(this, {
                 modelsPerPage: 3,
                 showXPages: 10
             });
         }
         return TableCollection;
     })(Backbone.Collection);
-    Coveo.TableCollection = TableCollection;
-})(Coveo || (Coveo = {}));
-var users = new Coveo.TableCollection([
+    Marionette.TableCollection = TableCollection;
+})(Marionette || (Marionette = {}));
+var users = new Marionette.TableCollection([
     {
         "firstName": "Sonya",
         "lastName": "Flowers",
@@ -524,7 +562,7 @@ var users = new Coveo.TableCollection([
     }
 ]);
 $(document).ready(function () {
-    var table = new Coveo.TableView({
+    var table = new Marionette.TableView({
         collection: users
     });
     table.render();

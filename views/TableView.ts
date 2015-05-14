@@ -1,6 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
-module Coveo {
+module Marionette {
     export var TableViewEvents = {
         Add: 'table-view:add',
         Remove: 'table-view:remove'

@@ -1,6 +1,6 @@
 /// <reference path="tests.ts" />
 
-module Coveo {
+module Marionette {
 	
     // Initialize 9 elements, 5 even, 4 odd, decending
     export var filterableSortableGroupablePageableModels = [];

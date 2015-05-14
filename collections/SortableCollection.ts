@@ -1,6 +1,6 @@
 /// <reference path="../_definitions.d.ts" />
 
-module Coveo {
+module Marionette {
     export class SortableCollection<TModel extends Backbone.Model> {
         ascending: boolean = false;
         filterValue: string = '';
