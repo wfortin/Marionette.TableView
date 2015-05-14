@@ -9,7 +9,7 @@ module Coveo.Filterable.Test {
       super(models, _.extend({
         model: Backbone.Model
       }, options));
-      TableCollectionBuilder.withFilters(this)
+      TableCollectionBuilder.withFilters(this);
     }
   }
 

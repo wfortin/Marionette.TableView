@@ -3,3 +3,4 @@
 
 /// <reference path="TableViewFixtures.ts" />
 /// <reference path="FilterableCollectionTest.ts" />
+/// <reference path="PageableCollectionTest.ts" />

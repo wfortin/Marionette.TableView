@@ -96,5 +96,45 @@ module Coveo {
         shouldRender(index: number): boolean {
             return index >= this.minIndex && index <= this.maxIndex;
         }
+
+        getPagesRange(showPrevNext = true, showFirstLast = false, lastPage = 0): PaginationItem[] {
+            var pages: PaginationItem[] = [];
+            lastPage = Math.max(this.lastPage, lastPage);
+
+            var start: number;
+            var end: number;
+
+            var offsetedPage = this.currentPage + this.offset;
+            if (offsetedPage + (this.options.showXPages / 2) > lastPage) {
+                end = lastPage;
+                start = Math.max(lastPage - this.options.showXPages, 0);
+            } else {
+                start = Math.max(Math.floor((this.currentPage + this.offset) - (this.options.showXPages / 2)), 0);
+                end = Math.min(start + this.options.showXPages, lastPage);
+            }
+
+            _.each(_.range(start, end + 1), (i) => {
+                pages.push({ label: (i + 1).toString(), page: i });
+            });
+
+            if (showPrevNext) {
+                pages.unshift({
+                    label: 'previous',
+                    page: Math.max(this.currentPage - 1 + this.offset, 0),
+                    icon: 'coveo-sprites-tables-previous'
+                });
+                pages.push({
+                    label: 'next',
+                    page: Math.min(this.currentPage + 1 + this.offset, lastPage),
+                    icon: 'coveo-sprites-tables-next'
+                });
+            }
+
+            if (showFirstLast) {
+                pages.unshift({ label: 'first', page: 0, icon: 'coveo-sprites-tables-first' });
+                pages.push({ label: 'last', page: lastPage, icon: 'coveo-sprites-tables-last' });
+            }
+            return pages;
+        }
     }
 }
