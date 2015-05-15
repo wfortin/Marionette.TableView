@@ -17,6 +17,11 @@ module Marionette {
             collection.sortable = new SortableCollection<Backbone.Model>(collection);
             return this;
         }
+        
+        static withGroups(collection: Groupable<Backbone.Model>, options?: GroupableCollectionOptions) {
+            collection.groupable = new GroupableCollection<Backbone.Model>(collection, options);
+            return this;
+        }
     }
 
     export interface FilterablePageableSortable<TModel extends Backbone.Model> extends Backbone.Collection<TModel> {
@@ -34,5 +39,9 @@ module Marionette {
     
     export interface Sortable<TModel extends Backbone.Model> extends Backbone.Collection<Backbone.Model> {
         sortable: SortableCollection<TModel>;
+    }
+    
+    export interface Groupable<TModel extends Backbone.Model> extends Backbone.Collection<Backbone.Model> {
+        groupable: GroupableCollection<TModel>;
     }
 }

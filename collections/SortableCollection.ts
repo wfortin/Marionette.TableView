@@ -6,7 +6,7 @@ module Marionette {
         filterValue: string = '';
         comparatorValue: string = 'lastName';
         
-        collection: Backbone.Collection<TModel>;
+        private collection: Backbone.Collection<TModel>;
         
         constructor(collection: Backbone.Collection<TModel>) {
             this.collection = collection;

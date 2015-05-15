@@ -7,12 +7,47 @@ var __extends = this.__extends || function (d, b) {
 };
 var Marionette;
 (function (Marionette) {
+    var GroupRowView = (function (_super) {
+        __extends(GroupRowView, _super);
+        function GroupRowView(options) {
+            _super.call(this, _.extend({
+                template: "#group-row",
+                tagName: "tbody"
+            }, options));
+            this.childView = GroupRowItemView;
+            this.childViewContainer = 'tbody';
+            this.collection = this.model.items;
+        }
+        GroupRowView.prototype.attachHtml = function (collectionView, childView, index) {
+            this.$el.append(childView.el);
+        };
+        GroupRowView.prototype.attachBuffer = function (compositeView, buffer) {
+            this.$el.append(buffer);
+        };
+        return GroupRowView;
+    })(Marionette.CompositeView);
+    Marionette.GroupRowView = GroupRowView;
+    var GroupRowItemView = (function (_super) {
+        __extends(GroupRowItemView, _super);
+        function GroupRowItemView(options) {
+            _super.call(this, _.extend({
+                template: "#group-row-item",
+                tagName: "tr"
+            }, options));
+        }
+        return GroupRowItemView;
+    })(Marionette.ItemView);
+    Marionette.GroupRowItemView = GroupRowItemView;
+})(Marionette || (Marionette = {}));
+/// <reference path="../_definitions.d.ts" />
+var Marionette;
+(function (Marionette) {
     var RowView = (function (_super) {
         __extends(RowView, _super);
         function RowView(options) {
             _super.call(this, _.extend({
-                template: "#row",
-                tagName: "tr"
+                template: "#group-row",
+                tagName: "tbody"
             }, options));
         }
         return RowView;
@@ -39,8 +74,13 @@ var Marionette;
                 }
             }, options));
             this.template = '#table';
-            this.childView = Marionette.RowView;
-            this.childViewContainer = 'tbody';
+            if (this.collection instanceof Marionette.GroupableCollection) {
+                this.childView = Marionette.GroupRowView;
+            }
+            else {
+                this.childView = Marionette.RowView;
+            }
+            this.childViewContainer = 'table';
             this.reorderOnSort = true;
             this.ui = _.extend({
                 addButton: 'button#add',
@@ -92,6 +132,9 @@ var Marionette;
                         return true;
                     }
                 }
+            }
+            else {
+                return true;
             }
         };
         TableView.prototype.onSort = function (e) {
@@ -447,6 +490,59 @@ var Marionette;
 /// <reference path="../_definitions.d.ts" />
 var Marionette;
 (function (Marionette) {
+    var GroupableCollection = (function (_super) {
+        __extends(GroupableCollection, _super);
+        function GroupableCollection(collection, groupByOptions) {
+            this.collection = collection;
+            var groupsMap = this.collection.groupBy(groupByOptions.key);
+            _super.call(this, [], {
+                model: GroupModel
+            });
+            for (var key in groupsMap) {
+                var itemCollection = new Backbone.Collection(groupsMap[key]);
+                this.add({
+                    key: key,
+                    items: itemCollection,
+                    collapsed: true
+                });
+            }
+        }
+        return GroupableCollection;
+    })(Backbone.Collection);
+    Marionette.GroupableCollection = GroupableCollection;
+    var GroupModel = (function (_super) {
+        __extends(GroupModel, _super);
+        function GroupModel() {
+            _super.apply(this, arguments);
+        }
+        Object.defineProperty(GroupModel.prototype, "key", {
+            get: function () {
+                return this.get('key');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(GroupModel.prototype, "items", {
+            get: function () {
+                return this.get('items');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(GroupModel.prototype, "collapsed", {
+            get: function () {
+                return this.get('collasped');
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return GroupModel;
+    })(Backbone.Model);
+    Marionette.GroupModel = GroupModel;
+})(Marionette || (Marionette = {}));
+/// <reference path="../_definitions.d.ts" />
+var Marionette;
+(function (Marionette) {
     var TableCollectionBuilder = (function () {
         function TableCollectionBuilder() {
         }
@@ -460,6 +556,10 @@ var Marionette;
         };
         TableCollectionBuilder.withSort = function (collection) {
             collection.sortable = new Marionette.SortableCollection(collection);
+            return this;
+        };
+        TableCollectionBuilder.withGroups = function (collection, options) {
+            collection.groupable = new Marionette.GroupableCollection(collection, options);
             return this;
         };
         return TableCollectionBuilder;
@@ -478,7 +578,7 @@ var Marionette;
             Marionette.TableCollectionBuilder.withFilters(this).withSort(this).withPagination(this, {
                 modelsPerPage: 3,
                 showXPages: 10
-            });
+            }).withGroups(this, { key: 'team' });
         }
         return TableCollection;
     })(Backbone.Collection);
@@ -488,83 +588,98 @@ var users = new Marionette.TableCollection([
     {
         "firstName": "Sonya",
         "lastName": "Flowers",
-        "phone": "+1 (842) 556-3810"
+        "phone": "+1 (842) 556-3810",
+        "team": "red"
     },
     {
         "firstName": "Dixon",
         "lastName": "Finley",
-        "phone": "+1 (925) 416-2751"
+        "phone": "+1 (925) 416-2751",
+        "team": "red"
     },
     {
         "firstName": "Kellie",
         "lastName": "Albert",
-        "phone": "+1 (867) 429-2201"
+        "phone": "+1 (867) 429-2201",
+        "team": "red"
     },
     {
         "firstName": "Carter",
         "lastName": "Sosa",
-        "phone": "+1 (851) 440-2041"
+        "phone": "+1 (851) 440-2041",
+        "team": "red"
     },
     {
         "firstName": "Mccormick",
         "lastName": "Chavez",
-        "phone": "+1 (801) 457-2193"
+        "phone": "+1 (801) 457-2193",
+        "team": "red"
     },
     {
         "firstName": "Lina",
         "lastName": "Battle",
-        "phone": "+1 (838) 487-3404"
+        "phone": "+1 (838) 487-3404",
+        "team": "blue"
     },
     {
         "firstName": "Mabel",
         "lastName": "Perez",
-        "phone": "+1 (852) 571-2564"
+        "phone": "+1 (852) 571-2564",
+        "team": "blue"
     },
     {
         "firstName": "Edna",
         "lastName": "Phillips",
-        "phone": "+1 (833) 443-2423"
+        "phone": "+1 (833) 443-2423",
+        "team": "blue"
     },
     {
         "firstName": "Daniel",
         "lastName": "Cortez",
-        "phone": "+1 (870) 488-2641"
+        "phone": "+1 (870) 488-2641",
+        "team": "blue"
     },
     {
         "firstName": "Stanton",
         "lastName": "Davenport",
-        "phone": "+1 (830) 497-2139"
+        "phone": "+1 (830) 497-2139",
+        "team": "blue"
     },
     {
         "firstName": "Woodward",
         "lastName": "Delaney",
-        "phone": "+1 (825) 427-3699"
+        "phone": "+1 (825) 427-3699",
+        "team": "blue"
     },
     {
         "firstName": "Hull",
         "lastName": "Stout",
-        "phone": "+1 (967) 483-3725"
+        "phone": "+1 (967) 483-3725",
+        "team": "green"
     },
     {
         "firstName": "Wendy",
         "lastName": "Reese",
-        "phone": "+1 (809) 558-3678"
+        "phone": "+1 (809) 558-3678",
+        "team": "green"
     },
     {
         "firstName": "Montgomery",
         "lastName": "Horne",
-        "phone": "+1 (852) 553-3681"
+        "phone": "+1 (852) 553-3681",
+        "team": "green"
     },
     {
         "firstName": "Blackburn",
         "lastName": "Moss",
-        "phone": "+1 (939) 419-3704"
+        "phone": "+1 (939) 419-3704",
+        "team": "green"
     }
 ]);
 $(document).ready(function () {
-    var table = new Marionette.TableView({
-        collection: users
+    var tableView = new Marionette.TableView({
+        collection: users.groupable
     });
-    table.render();
-    $('#table-placeholder').html(table.el);
+    tableView.render();
+    $('#table-placeholder').html(tableView.el);
 });

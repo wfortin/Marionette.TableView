@@ -31,8 +31,14 @@ module Marionette {
                 }
             }, options));
             this.template = <any> '#table';
-            this.childView = RowView;
-            this.childViewContainer = 'tbody';
+            
+            if (this.collection instanceof GroupableCollection) {
+                this.childView = GroupRowView;
+            } else {
+                this.childView = RowView;
+            }
+            
+            this.childViewContainer = 'table';
             this.reorderOnSort = true;
 
             this.ui = _.extend({
@@ -89,6 +95,8 @@ module Marionette {
                         return true
                     }
                 }
+            } else {
+                return true;
             }
         }
 

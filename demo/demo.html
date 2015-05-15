@@ -17,11 +17,29 @@
   
   <body>
     <div id="table-placeholder"></div>
+      
+    <div id="groupable-table-placeholder"></div>
   </body>
   <script id="row" type="text/template">
+    <tr>
+      <td><%= firstName %></td>
+      <td><%= lastName %></td>
+      <td><%= phone %></td>
+      <td><%= team %></td>
+    </tr>
+  </script>
+  <script id="group-row" type="text/template">
+    <tr class="group-header">
+      <td colspan="4">
+        <%- key %>
+      </td>
+    </tr>
+  </script>
+  <script id="group-row-item" type="text/template">
     <td><%= firstName %></td>
     <td><%= lastName %></td>
     <td><%= phone %></td>
+    <td><%= team %></td>
   </script>
   <script id="table" type="text/template">
     <div id="actions">
@@ -41,11 +59,9 @@
             <span class="dsc">▼</span>
           </th>
           <th>Phone</th>
+          <th>Team</th>
         </tr>
       </thead>
-      <tbody>
-  
-      </tbody>
     </table>
     <button type="button" class="prev">
       <<

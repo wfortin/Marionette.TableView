@@ -4,9 +4,9 @@ module Marionette {
 	export class RowView extends Marionette.ItemView<Backbone.Model> {
 		constructor(options?: any) {
 			super(_.extend({
-				template: "#row",
-				tagName: "tr"
-			}, options))
+				template: "#group-row",
+				tagName: "tbody"
+			}, options));
 		}
 	}
 }
