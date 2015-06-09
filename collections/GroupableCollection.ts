@@ -17,10 +17,9 @@ module Marionette {
             super([], {
                 model: GroupModel
             });
-            
 
             for (var key in groupsMap) {
-                var itemCollection = new Backbone.Collection<Backbone.Model>(groupsMap[key]);
+                var itemCollection = new GroupCollection(groupsMap[key]);
                 this.add({
                     key: key,
                     items: itemCollection,
@@ -32,7 +31,21 @@ module Marionette {
 
     export class GroupModel extends Backbone.Model {
         get key(): string { return this.get('key') }
-        get items(): Backbone.Collection<Backbone.Model> { return this.get('items') }
+        get items(): GroupCollection { return this.get('items') }
         get collapsed(): boolean { return this.get('collasped') }
+    }
+
+    export class GroupCollection extends Backbone.Collection<Backbone.Model> {
+        filterable: FilterableCollection<Backbone.Model>;
+        sortable: SortableCollection<Backbone.Model>;
+
+        constructor(models?, options?) {
+            super(models, _.extend({
+                model: Backbone.Model
+            }, options));
+            TableCollectionBuilder.withFilters(this).withSort(this);
+            
+            this.filterable.applyFilter({ filter: '' });
+        }
     }
 }

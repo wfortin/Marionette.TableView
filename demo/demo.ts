@@ -6,7 +6,7 @@ module Marionette {
     sortable: SortableCollection<Backbone.Model>;
     pageable: PageableCollection<Backbone.Model>;
     groupable: GroupableCollection<Backbone.Model>;
-  
+
     constructor(models?, options?) {
       super(models, _.extend({
         model: Backbone.Model
@@ -14,7 +14,7 @@ module Marionette {
       TableCollectionBuilder.withFilters(this).withSort(this).withPagination(this, {
         modelsPerPage: 3,
         showXPages: 10
-      }).withGroups(this, {key : 'team'})
+      }).withGroups(this, { key: 'team' });
     }
   }
 }
@@ -115,9 +115,17 @@ var users = new Marionette.TableCollection(
 
 $(document).ready(() => {
   var tableView = new Marionette.TableView({
-    collection: users.groupable
+    collection: users
   });
   tableView.render();
 
   $('#table-placeholder').html(tableView.el);
+
+
+  var groupsTableView = new Marionette.TableView({
+    collection: users.groupable
+  });
+  groupsTableView.render();
+
+  $('#groupable-table-placeholder').html(groupsTableView.el);
 })

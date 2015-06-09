@@ -24,6 +24,22 @@ var Marionette;
         GroupRowView.prototype.attachBuffer = function (compositeView, buffer) {
             this.$el.append(buffer);
         };
+        GroupRowView.prototype.filter = function (child, index, collection) {
+            if (this.collection.filterable) {
+                if (child.matchesFilter === true) {
+                    return true;
+                }
+            }
+            else {
+                return true;
+            }
+        };
+        GroupRowView.prototype.viewComparator = function (a, b) {
+            if (this.collection.sortable) {
+                return this.collection.sortable.compare(a, b);
+            }
+            return 0;
+        };
         return GroupRowView;
     })(Marionette.CompositeView);
     Marionette.GroupRowView = GroupRowView;
@@ -35,6 +51,9 @@ var Marionette;
                 tagName: "tr"
             }, options));
         }
+        GroupRowItemView.prototype.onRender = function () {
+            console.log(this.model.toJSON());
+        };
         return GroupRowItemView;
     })(Marionette.ItemView);
     Marionette.GroupRowItemView = GroupRowItemView;
@@ -46,7 +65,7 @@ var Marionette;
         __extends(RowView, _super);
         function RowView(options) {
             _super.call(this, _.extend({
-                template: "#group-row",
+                template: "#row",
                 tagName: "tbody"
             }, options));
         }
@@ -107,14 +126,23 @@ var Marionette;
             };
         };
         TableView.prototype.onFilter = function () {
+            var _this = this;
             var val = this.ui.inputFilter.val();
-            if (this.collection.filterable && val != this.collection.filterable.getFilter()) {
-                this.collection.filterable.applyFilter({
-                    filter: val
+            if (this.collection instanceof Marionette.GroupableCollection) {
+                this.collection.each(function (group) {
+                    _this.applyFilter(group.items.filterable, val);
                 });
-                this.currentRenderingIndex = 0;
-                this.renderChildren();
             }
+            else if (this.collection.filterable && val != this.collection.filterable.getFilter()) {
+                this.applyFilter(this.collection.filterable, val);
+            }
+        };
+        TableView.prototype.applyFilter = function (collection, val) {
+            collection.applyFilter({
+                filter: val
+            });
+            this.currentRenderingIndex = 0;
+            this.renderChildren();
         };
         TableView.prototype.filter = function (child, index, collection) {
             if (this.collection.filterable) {
@@ -138,8 +166,16 @@ var Marionette;
             }
         };
         TableView.prototype.onSort = function (e) {
+            var _this = this;
             this.currentRenderingIndex = 0;
-            if (this.collection.sortable) {
+            if (this.collection instanceof Marionette.GroupableCollection) {
+                this.collection.each(function (group) {
+                    group.items.sortable.ascending = !!$(e.currentTarget).hasClass('asc');
+                    group.items.sortable.comparatorValue = $(e.currentTarget).parent().data('sort');
+                    _this.renderChildren();
+                });
+            }
+            else if (this.collection.sortable) {
                 this.collection.sortable.ascending = !!$(e.currentTarget).hasClass('asc');
                 this.collection.sortable.comparatorValue = $(e.currentTarget).parent().data('sort');
                 this.renderChildren();
@@ -499,7 +535,7 @@ var Marionette;
                 model: GroupModel
             });
             for (var key in groupsMap) {
-                var itemCollection = new Backbone.Collection(groupsMap[key]);
+                var itemCollection = new GroupCollection(groupsMap[key]);
                 this.add({
                     key: key,
                     items: itemCollection,
@@ -539,6 +575,18 @@ var Marionette;
         return GroupModel;
     })(Backbone.Model);
     Marionette.GroupModel = GroupModel;
+    var GroupCollection = (function (_super) {
+        __extends(GroupCollection, _super);
+        function GroupCollection(models, options) {
+            _super.call(this, models, _.extend({
+                model: Backbone.Model
+            }, options));
+            Marionette.TableCollectionBuilder.withFilters(this).withSort(this);
+            this.filterable.applyFilter({ filter: '' });
+        }
+        return GroupCollection;
+    })(Backbone.Collection);
+    Marionette.GroupCollection = GroupCollection;
 })(Marionette || (Marionette = {}));
 /// <reference path="../_definitions.d.ts" />
 var Marionette;
@@ -678,8 +726,13 @@ var users = new Marionette.TableCollection([
 ]);
 $(document).ready(function () {
     var tableView = new Marionette.TableView({
-        collection: users.groupable
+        collection: users
     });
     tableView.render();
     $('#table-placeholder').html(tableView.el);
+    var groupsTableView = new Marionette.TableView({
+        collection: users.groupable
+    });
+    groupsTableView.render();
+    $('#groupable-table-placeholder').html(groupsTableView.el);
 });

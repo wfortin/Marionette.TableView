@@ -31,13 +31,13 @@ module Marionette {
                 }
             }, options));
             this.template = <any> '#table';
-            
+
             if (this.collection instanceof GroupableCollection) {
                 this.childView = GroupRowView;
             } else {
                 this.childView = RowView;
             }
-            
+
             this.childViewContainer = 'table';
             this.reorderOnSort = true;
 
@@ -71,20 +71,28 @@ module Marionette {
 
         protected onFilter() {
             var val = this.ui.inputFilter.val();
-            if (this.collection.filterable && val != this.collection.filterable.getFilter()) {
-                this.collection.filterable.applyFilter({
-                    filter: val
+            if (this.collection instanceof GroupableCollection) {
+                this.collection.each((group: GroupModel) => {
+                    this.applyFilter(group.items.filterable, val);
                 });
-                this.currentRenderingIndex = 0;
-                this.renderChildren();
+            } else if (this.collection.filterable && val != this.collection.filterable.getFilter()) {
+                this.applyFilter(this.collection.filterable, val);
             }
+        }
+
+        protected applyFilter(collection: FilterableCollection<Backbone.Model>, val: string) {
+            collection.applyFilter({
+                filter: val
+            })
+            this.currentRenderingIndex = 0;
+            this.renderChildren();
         }
 
         protected filter(child: FilterableModel, index: number, collection: TableViewCollection<Backbone.Model>) {
             if (this.collection.filterable) {
                 if (child.matchesFilter === true) {
                     if (this.collection.pageable) {
-                        if (index >= this.currentRenderingIndex ) {
+                        if (index >= this.currentRenderingIndex) {
                             var shouldRender = this.collection.pageable.shouldRender(this.currentRenderingIndex % this.collection.length);
                             if (shouldRender) {
                                 this.currentRenderingIndex++;
@@ -102,11 +110,19 @@ module Marionette {
 
         protected onSort(e: JQueryEventObject) {
             this.currentRenderingIndex = 0;
-            if (this.collection.sortable) {
+
+            if (this.collection instanceof GroupableCollection) {
+                this.collection.each((group: GroupModel) => {
+                    group.items.sortable.ascending = !!$(e.currentTarget).hasClass('asc');
+                    group.items.sortable.comparatorValue = $(e.currentTarget).parent().data('sort');
+                    this.renderChildren();
+                });
+            } else if (this.collection.sortable) {
                 this.collection.sortable.ascending = !!$(e.currentTarget).hasClass('asc');
                 this.collection.sortable.comparatorValue = $(e.currentTarget).parent().data('sort');
                 this.renderChildren();
             }
+
         }
 
         protected viewComparator(a, b) {

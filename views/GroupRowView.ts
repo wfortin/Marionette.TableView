@@ -2,7 +2,7 @@
 
 module Marionette {
 	export class GroupRowView extends Marionette.CompositeView<Backbone.Model, Backbone.Collection<Backbone.Model>> {
-		
+		collection: GroupCollection;
 		model: GroupModel;
 
 		constructor(options?: any) {
@@ -24,6 +24,23 @@ module Marionette {
         attachBuffer(compositeView, buffer) {
             this.$el.append(buffer);
         }
+		
+        protected filter(child: FilterableModel, index: number, collection: GroupCollection) {
+            if (this.collection.filterable) {
+                if (child.matchesFilter === true) {
+                        return true;
+                }
+            } else {
+                return true;
+            }
+        }
+		
+        protected viewComparator(a, b) {
+            if (this.collection.sortable) {
+                return this.collection.sortable.compare(a, b);
+            }
+            return 0;
+        }
 	}
 
 	export class GroupRowItemView extends Marionette.ItemView<Backbone.Model> {
@@ -33,5 +50,9 @@ module Marionette {
 				tagName: "tr"
 			}, options));
 		}
-	}
+		
+		onRender() {
+			console.log(this.model.toJSON())
+		}
+ 	}
 }
